@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title description">
+  <title id="title">Profile placeholder</title>
+  <desc id="description">Abstract black and blue profile mark</desc>
+  <rect width="256" height="256" rx="64" fill="#101217"/>
+  <path d="M0 196 196 0h60v60L60 256H0z" fill="#2563eb"/>
+  <circle cx="128" cy="96" r="40" fill="#fff"/>
+  <path d="M56 218c8-48 32-72 72-72s64 24 72 72" fill="#fff"/>
+</svg>

@@ -1,0 +1,6 @@
+# Copy this file to .dev.vars for local development. Never commit .dev.vars.
+ADMIN_USERNAME=replace-with-a-private-username
+ADMIN_PASSWORD_DIGEST=replace-with-generated-digest
+ADMIN_PASSWORD_PEPPER=replace-with-generated-pepper
+ADMIN_SESSION_SECRET=replace-with-generated-session-secret
+SITE_URL=http://localhost:5173
