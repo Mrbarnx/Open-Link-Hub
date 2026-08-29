@@ -9,6 +9,7 @@ export type SiteSettings = {
   headline: string;
   intro: string;
   profileImageUrl: string;
+  faviconUrl: string;
   resumeUrl: string;
   location: string;
   email: string;
@@ -29,6 +30,7 @@ export const defaultSiteSettings: SiteSettings = {
   headline: "Designer, developer and digital creator",
   intro: "Use this space for a short introduction explaining what you create and what visitors should explore first.",
   profileImageUrl: "/api/media/profile",
+  faviconUrl: "/api/media/favicon",
   resumeUrl: "",
   location: "Remote",
   email: "hello@example.com",
@@ -49,6 +51,7 @@ const settingKeys: Record<keyof SiteSettings, string> = {
   headline: "headline",
   intro: "profile_intro",
   profileImageUrl: "profile_image_url",
+  faviconUrl: "favicon_url",
   resumeUrl: "resume_url",
   location: "location",
   email: "email",
@@ -76,6 +79,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       headline: saved.get(settingKeys.headline) ?? defaultSiteSettings.headline,
       intro: saved.get(settingKeys.intro) ?? defaultSiteSettings.intro,
       profileImageUrl: saved.get(settingKeys.profileImageUrl) ?? defaultSiteSettings.profileImageUrl,
+      faviconUrl: saved.get(settingKeys.faviconUrl) ?? defaultSiteSettings.faviconUrl,
       resumeUrl: saved.get(settingKeys.resumeUrl) ?? defaultSiteSettings.resumeUrl,
       location: saved.get(settingKeys.location) ?? defaultSiteSettings.location,
       email: saved.get(settingKeys.email) ?? defaultSiteSettings.email,
@@ -117,11 +121,12 @@ export function parseSiteSettings(value: unknown): SiteSettings | null {
   const headline = text("headline", 4, 120);
   const intro = text("intro", 10, 240);
   const profileImageUrl = mediaUrl(input.profileImageUrl);
+  const faviconUrl = mediaUrl(input.faviconUrl);
   const rawResumeUrl = typeof input.resumeUrl === "string" ? input.resumeUrl.trim() : "";
   const resumeUrl = rawResumeUrl ? mediaUrl(rawResumeUrl) : "";
   const location = text("location", 2, 80);
   const email = text("email", 5, 150);
-  if (!displayName || !headline || !intro || !profileImageUrl || resumeUrl === null || !location || !email || !/^\S+@\S+\.\S+$/.test(email)) return null;
+  if (!displayName || !headline || !intro || !profileImageUrl || !faviconUrl || resumeUrl === null || !location || !email || !/^\S+@\S+\.\S+$/.test(email)) return null;
 
   const urlFields = ["githubUrl", "linkedinUrl", "xUrl", "instagramUrl", "whatsappUrl", "tiktokUrl"] as const;
   const urls: Record<(typeof urlFields)[number], string> = {
@@ -135,7 +140,7 @@ export function parseSiteSettings(value: unknown): SiteSettings | null {
   }
 
   return {
-    displayName, headline, intro, profileImageUrl, resumeUrl, location, email, ...urls,
+    displayName, headline, intro, profileImageUrl, faviconUrl, resumeUrl, location, email, ...urls,
     accentColor: parseAccent(input.accentColor),
     backgroundStyle: parseBackground(input.backgroundStyle),
     cardStyle: parseCardStyle(input.cardStyle),

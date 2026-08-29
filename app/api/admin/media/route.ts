@@ -5,6 +5,13 @@ import { getR2Binding } from "../../../../lib/runtime-env";
 export const dynamic = "force-dynamic";
 
 const PHOTO_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+const FAVICON_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/x-icon",
+  "image/vnd.microsoft.icon",
+]);
 
 export async function POST(request: NextRequest) {
   if (!isSameOrigin(request)) {
@@ -23,7 +30,7 @@ export async function POST(request: NextRequest) {
     const form = await request.formData();
     const kind = form.get("kind");
     const file = form.get("file");
-    if (!(file instanceof File) || (kind !== "profile" && kind !== "resume")) {
+    if (!(file instanceof File) || (kind !== "profile" && kind !== "favicon" && kind !== "resume")) {
       return NextResponse.json({ message: "Choose a valid file." }, { status: 400 });
     }
 
@@ -36,6 +43,16 @@ export async function POST(request: NextRequest) {
         httpMetadata: { contentType: file.type },
       });
       return NextResponse.json({ ok: true, url: `/api/media/profile?v=${Date.now()}` });
+    }
+
+    if (kind === "favicon") {
+      if (bytes.length > 1024 * 1024 || !FAVICON_TYPES.has(file.type) || !isFavicon(bytes, file.type)) {
+        return NextResponse.json({ message: "Use a valid PNG, JPG, WebP or ICO image smaller than 1 MB." }, { status: 400 });
+      }
+      await getR2Binding().put("favicon/current", bytes, {
+        httpMetadata: { contentType: file.type },
+      });
+      return NextResponse.json({ ok: true, url: `/api/media/favicon?v=${Date.now()}` });
     }
 
     if (bytes.length > 8 * 1024 * 1024 || file.type !== "application/pdf" || !isPdf(bytes)) {
@@ -64,4 +81,9 @@ function isImage(bytes: Uint8Array, type: string): boolean {
     return String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" && String.fromCharCode(...bytes.slice(8, 12)) === "WEBP";
   }
   return false;
+}
+
+function isFavicon(bytes: Uint8Array, type: string): boolean {
+  if (PHOTO_TYPES.has(type)) return isImage(bytes, type);
+  return bytes.length >= 4 && bytes[0] === 0x00 && bytes[1] === 0x00 && bytes[2] === 0x01 && bytes[3] === 0x00;
 }

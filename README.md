@@ -7,7 +7,7 @@ A free, self-hosted link-in-bio, portfolio, CV and product showcase with a secur
 ## Features
 
 - Premium responsive public link page
-- Profile photo, social links and contact links
+- Admin-managed profile photo, favicon, social links and contact links
 - Editable links and featured products
 - Structured CV page and downloadable résumé upload
 - Admin dashboard for content, appearance and analytics
@@ -51,7 +51,7 @@ Open the local URL printed by Vite. Admin is available at `/admin`.
 
 1. Sign in at `/admin`.
 2. Replace the introduction and social URLs.
-3. Upload a profile photo and résumé PDF.
+3. Upload a profile photo, favicon and résumé PDF.
 4. Edit the featured links, product and CV sections.
 5. Choose the accent colour, card style and background.
 6. Save and open the public page.

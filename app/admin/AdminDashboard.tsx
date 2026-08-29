@@ -61,7 +61,7 @@ export function AdminDashboard({ initialSettings, initialLinks, initialProducts,
   const [cv, setCv] = useState(initialCv);
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState<"profile" | "resume" | "">("");
+  const [uploading, setUploading] = useState<"profile" | "favicon" | "resume" | "">("");
 
   function setSetting<K extends keyof SiteSettings>(field: K, value: SiteSettings[K]) {
     setSettings((current) => ({ ...current, [field]: value }));
@@ -114,7 +114,7 @@ export function AdminDashboard({ initialSettings, initialLinks, initialProducts,
     setCv((current) => ({ ...current, education: current.education.map((item, itemIndex) => itemIndex === index ? { ...item, ...patch } : item) }));
   }
 
-  async function uploadMedia(kind: "profile" | "resume", file?: File) {
+  async function uploadMedia(kind: "profile" | "favicon" | "resume", file?: File) {
     if (!file) return;
     setUploading(kind);
     setStatus("");
@@ -127,8 +127,10 @@ export function AdminDashboard({ initialSettings, initialLinks, initialProducts,
       if (!response.ok || !result.url) {
         setStatus(result.message ?? "The upload could not be completed.");
       } else {
-        setSetting(kind === "profile" ? "profileImageUrl" : "resumeUrl", result.url);
-        setStatus(`${kind === "profile" ? "Profile photo" : "Résumé PDF"} uploaded. Save changes to keep this version.`);
+        const setting = kind === "profile" ? "profileImageUrl" : kind === "favicon" ? "faviconUrl" : "resumeUrl";
+        const label = kind === "profile" ? "Profile photo" : kind === "favicon" ? "Favicon" : "Résumé PDF";
+        setSetting(setting, result.url);
+        setStatus(`${label} uploaded. Save changes to keep this version.`);
       }
     } catch {
       setStatus("The upload could not be completed.");
@@ -334,6 +336,17 @@ export function AdminDashboard({ initialSettings, initialLinks, initialProducts,
 
             {activeTab === "appearance" ? (
               <div className="admin-tab-content admin-form-stack">
+                <div className="admin-media-editor admin-favicon-editor">
+                  {/* Dynamic admin-managed media intentionally bypasses the fixed Next image host allowlist. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={settings.faviconUrl} alt="Current favicon" />
+                  <div>
+                    <span>SITE FAVICON</span>
+                    <p>Shown in browser tabs and bookmarks. Use a square 512 × 512 PNG, JPG, WebP or ICO image.</p>
+                    <label className="admin-upload-button"><Upload size={14} /> {uploading === "favicon" ? "Uploading…" : "Upload favicon"}<input type="file" accept="image/png,image/jpeg,image/webp,image/x-icon,image/vnd.microsoft.icon,.ico" disabled={Boolean(uploading)} onChange={(event) => uploadMedia("favicon", event.target.files?.[0])} /></label>
+                  </div>
+                </div>
+                <Field label="Favicon URL" value={settings.faviconUrl} onChange={(value) => setSetting("faviconUrl", value)} placeholder="/api/media/favicon or https://..." />
                 <div className="admin-option-section"><h3>Accent color</h3><p>Used for highlights, icons and focus states.</p><div className="admin-color-options">{accentOptions.map((option) => <button className={settings.accentColor === option.value ? "selected" : ""} style={{ "--swatch": option.value } as React.CSSProperties} type="button" key={option.value} onClick={() => setSetting("accentColor", option.value)}><i /> {option.label}</button>)}</div></div>
                 <ChoiceGroup title="Background" value={settings.backgroundStyle} options={[{ value: "grid", label: "Technical grid", note: "Current premium grid" }, { value: "clean", label: "Clean white", note: "Minimal and distraction-free" }, { value: "soft", label: "Soft glow", note: "Subtle blue atmosphere" }]} onChange={(value) => setSetting("backgroundStyle", value as BackgroundStyle)} />
                 <ChoiceGroup title="Card shape" value={settings.cardStyle} options={[{ value: "rounded", label: "Rounded", note: "Soft Apple-style corners" }, { value: "soft-square", label: "Soft square", note: "More technical and compact" }]} onChange={(value) => setSetting("cardStyle", value as CardStyle)} />

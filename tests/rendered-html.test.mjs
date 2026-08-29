@@ -26,3 +26,17 @@ test("SEO routes and sanitized defaults are present", async () => {
   assert.match(settings, /Your Name/);
   assert.doesNotMatch(`${settings}\n${cv}`, /Barnabas|Mrbarnx|Human Anatomy|FUTO/i);
 });
+
+test("admin-managed favicon uses validated R2 media", async () => {
+  const [layout, settings, upload, favicon] = await Promise.all([
+    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../lib/site-settings.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/admin/media/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/media/favicon/route.ts", import.meta.url), "utf8"),
+  ]);
+  assert.match(layout, /settings\.faviconUrl/);
+  assert.match(settings, /favicon_url/);
+  assert.match(upload, /favicon\/current/);
+  assert.match(upload, /smaller than 1 MB/);
+  assert.match(favicon, /x-content-type-options/);
+});

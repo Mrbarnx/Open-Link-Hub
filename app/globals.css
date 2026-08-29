@@ -612,6 +612,7 @@ a { -webkit-tap-highlight-color: transparent; }
 .admin-upload-button { width: fit-content; min-height: 36px; display: inline-flex !important; align-items: center; justify-content: center; flex-direction: row !important; gap: 7px !important; padding: 0 12px; border-radius: 11px; color: white !important; background: #111318; cursor: pointer; }
 .admin-upload-button input { display: none; }
 .admin-resume-editor { align-items: center; }
+.admin-favicon-editor > img { width: 64px; height: 64px; border-radius: 15px; object-position: center; image-rendering: auto; }
 .admin-media-icon { width: 64px; height: 64px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 17px; color: var(--blue); background: var(--blue-soft); }
 .admin-cv-heading { margin: 3px 0 0; padding-top: 18px; border-top: 1px solid var(--line); }
 .admin-cv-heading strong { font-size: 13px; }
