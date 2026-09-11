@@ -83,12 +83,12 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       resumeUrl: saved.get(settingKeys.resumeUrl) ?? defaultSiteSettings.resumeUrl,
       location: saved.get(settingKeys.location) ?? defaultSiteSettings.location,
       email: saved.get(settingKeys.email) ?? defaultSiteSettings.email,
-      githubUrl: saved.get(settingKeys.githubUrl) || defaultSiteSettings.githubUrl,
-      linkedinUrl: saved.get(settingKeys.linkedinUrl) || defaultSiteSettings.linkedinUrl,
-      xUrl: saved.get(settingKeys.xUrl) || defaultSiteSettings.xUrl,
+      githubUrl: saved.get(settingKeys.githubUrl) ?? defaultSiteSettings.githubUrl,
+      linkedinUrl: saved.get(settingKeys.linkedinUrl) ?? defaultSiteSettings.linkedinUrl,
+      xUrl: saved.get(settingKeys.xUrl) ?? defaultSiteSettings.xUrl,
       instagramUrl: saved.get(settingKeys.instagramUrl) ?? "",
       whatsappUrl: saved.get(settingKeys.whatsappUrl) ?? "",
-      tiktokUrl: saved.get(settingKeys.tiktokUrl) || defaultSiteSettings.tiktokUrl,
+      tiktokUrl: saved.get(settingKeys.tiktokUrl) ?? defaultSiteSettings.tiktokUrl,
       accentColor: parseAccent(saved.get(settingKeys.accentColor)),
       backgroundStyle: parseBackground(saved.get(settingKeys.backgroundStyle)),
       cardStyle: parseCardStyle(saved.get(settingKeys.cardStyle)),
@@ -125,7 +125,7 @@ export function parseSiteSettings(value: unknown): SiteSettings | null {
   const rawResumeUrl = typeof input.resumeUrl === "string" ? input.resumeUrl.trim() : "";
   const resumeUrl = rawResumeUrl ? mediaUrl(rawResumeUrl) : "";
   const location = text("location", 2, 80);
-  const email = text("email", 5, 150);
+  const email = typeof input.email === "string" ? input.email.trim() : "";
   if (!displayName || !headline || !intro || !profileImageUrl || !faviconUrl || resumeUrl === null || !location || !email || !/^\S+@\S+\.\S+$/.test(email)) return null;
 
   const urlFields = ["githubUrl", "linkedinUrl", "xUrl", "instagramUrl", "whatsappUrl", "tiktokUrl"] as const;
