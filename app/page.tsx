@@ -39,7 +39,7 @@ export default async function Home() {
     { icon: <BrandIcon brand="instagram" />, label: "Instagram", href: settings.instagramUrl },
     { icon: <BrandIcon brand="whatsapp" />, label: "WhatsApp", href: settings.whatsappUrl },
     { icon: <BrandIcon brand="tiktok" />, label: "TikTok", href: settings.tiktokUrl },
-    { icon: <Mail size={21} strokeWidth={2} />, label: "Email", href: `mailto:${settings.email}` },
+    { icon: <Mail size={21} strokeWidth={2} />, label: "Email", href: settings.email ? `mailto:${settings.email}` : "" },
   ];
   const activeLinks = links.filter((item) => item.isActive);
   const activeProducts = products.filter((item) => item.isActive);
@@ -50,7 +50,7 @@ export default async function Home() {
     name: settings.displayName,
     url: getPublicSiteUrl(),
     jobTitle: settings.headline,
-    email: `mailto:${settings.email}`,
+    ...(settings.email ? { email: `mailto:${settings.email}` } : {}),
     sameAs: [settings.githubUrl, settings.linkedinUrl, settings.xUrl, settings.instagramUrl, settings.tiktokUrl].filter(Boolean),
   };
 
