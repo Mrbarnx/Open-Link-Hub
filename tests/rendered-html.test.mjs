@@ -35,8 +35,15 @@ test("admin-managed favicon uses validated R2 media", async () => {
     readFile(new URL("../app/api/media/favicon/route.ts", import.meta.url), "utf8"),
   ]);
   assert.match(layout, /settings\.faviconUrl/);
+  assert.match(layout, /force-dynamic/);
+  assert.match(layout, /rel="icon" href=\{settings\.faviconUrl\}/);
+  assert.match(layout, /rel="shortcut icon" href=\{settings\.faviconUrl\}/);
+  assert.match(layout, /rel="apple-touch-icon" href=\{settings\.faviconUrl\}/);
   assert.match(settings, /favicon_url/);
   assert.match(upload, /favicon\/current/);
   assert.match(upload, /smaller than 1 MB/);
   assert.match(favicon, /x-content-type-options/);
+  const worker = await readFile(new URL("../worker/index.ts", import.meta.url), "utf8");
+  assert.match(worker, /url\.pathname === "\/favicon\.ico"/);
+  assert.match(worker, /\/api\/media\/favicon/);
 });
