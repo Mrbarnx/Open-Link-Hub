@@ -41,6 +41,10 @@ const worker = {
       }, allowedWidths);
     }
 
+    if (url.pathname === "/favicon.ico") {
+      return Response.redirect(new URL("/api/media/favicon", request.url), 307);
+    }
+
     if (request.method === "TRACE" || request.method === "CONNECT") {
       return new Response("Method not allowed", { status: 405 });
     }

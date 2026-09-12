@@ -3,6 +3,8 @@ import { getPublicSiteUrl } from "../lib/runtime-env";
 import { getSiteSettings } from "../lib/site-settings";
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const siteUrl = getPublicSiteUrl();
   const settings = await getSiteSettings();
@@ -21,13 +23,20 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSiteSettings();
+
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href={settings.faviconUrl} />
+        <link rel="shortcut icon" href={settings.faviconUrl} />
+        <link rel="apple-touch-icon" href={settings.faviconUrl} />
+      </head>
       <body>{children}</body>
     </html>
   );
