@@ -2,6 +2,9 @@
 
 A free, self-hosted link-in-bio, portfolio, CV and product showcase with a secure admin dashboard, first-party click analytics and Cloudflare deployment.
 
+<img width="1027" height="713" alt="image" src="https://github.com/user-attachments/assets/1e4ed8c0-1563-4688-ab62-4541214397db" />
+
+
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Mrbarnx/Open-Link-Hub)
 
 ## Features
